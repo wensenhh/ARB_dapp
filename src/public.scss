@@ -1,0 +1,71 @@
+// 快捷布局
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  @mixin flexLeft {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  @mixin flexRight {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  @mixin flexBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  @mixin flexCenterColumn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  @mixin flexLeftColumn {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+  }
+  @mixin flexRightColumn {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+  }
+  @mixin justifiedLayout {
+    text-align: center;
+    &:first-child {
+      text-align: left;
+    }
+    &:last-child {
+      text-align: right;
+    }
+  }
+  @mixin fullImage {
+    image {
+      width: 100%;
+    }
+  }
+  @mixin calcMargin($val) {
+    width: calc(100% + ((2 * #{$val}) * 1upx));
+    margin-left: calc((-1 * #{$val}) * 1upx);
+  }
+  @mixin clearLastMargin {
+    &:last-child {
+      margin: 0;
+    }
+  }
+  @mixin clearLastBorder {
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  /* 动画 */
+  @mixin initTransition($val) {
+    transition: ($val * 1s) all;
+  }
