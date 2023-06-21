@@ -45,7 +45,7 @@
                 <div class="flex-row items-center space-x-8">
                     <img class="shrink-0 image_4"
                         src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123274620927281.png" />
-                    <span class="font_3">距雛下次鐍幣：</span>
+                    <span class="font_3">距离下次铸币：</span>
                 </div>
                 <span class="font_4"><van-count-down :time="artassetsinfo?.leftTime"
                                     format="DD 天 HH 时 mm 分 ss 秒" /></span>
@@ -54,7 +54,7 @@
                 <div class="flex-row items-center space-x-8">
                     <img class="shrink-0 image_4"
                         src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123275266623067.png" />
-                    <span class="font_3">流通總量：</span>
+                    <span class="font_3">流通总量：</span>
                 </div>
                 <span class="font_4 text_11">{{ artassetsinfo?.liutong }} ART</span>
             </div>
@@ -70,7 +70,7 @@
                 <div class="flex-row items-center space-x-8">
                     <img class="shrink-0 image_4"
                         src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123276066097459.png" />
-                    <span class="font_3">ART價格：</span>
+                    <span class="font_3">ART价格：</span>
                 </div>
                 <span class="font_4 text_13">{{ artassetsinfo?.art_today_jyprice }} ARB</span>
             </div>

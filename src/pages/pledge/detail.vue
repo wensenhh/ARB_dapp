@@ -7,7 +7,7 @@
                         <div class="flex-row justify-between items-center">
                             <div class="flex-row items-center space-x-12">
                                 <img class="shrink-0 image_2"
-                                    src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123255016017448.png" />
+                                    src="/logo.png" />
                                 <span class="font_1">{{ item.zynum }}</span>
                             </div>
                             <div class="flex-col justify-start items-center text-wrapper">
@@ -28,7 +28,7 @@
                             <span class="font_3">质押收益(ARB)</span>
                             <span class="font_4">{{ item.shuhuinum }}</span>
                             <img class="image_2"
-                                src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123255016017448.png" />
+                                src="/logo.png" />
                         </div>
                         <div class="flex-row space-x-10">
                             <span class="font_3 text_6">质押倒计时</span>
