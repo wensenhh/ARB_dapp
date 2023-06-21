@@ -30,7 +30,7 @@ service.interceptors.request.use(
 
 //配置成功后的拦截器
 service.interceptors.response.use(async res => {
-	if (res.data.code == 0) {
+	if (res.data.code == 1) {
 		return res.data
 	} else if (res.data.code == 302) {
 		await store.changetoken('')

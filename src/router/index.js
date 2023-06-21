@@ -18,34 +18,40 @@ const routes = [
             name: "首页",
             component: () => import('../pages/home/index.vue'),
         },{
-            path: "/home/nft",
-            name: "NFT",
-            component: () => import('../pages/home/nft.vue'),
+            path: "/pledge/detail",
+            name: "质押记录",
+            component: () => import('../pages/pledge/detail.vue'),
         },{
-            path: "/home/swap",
-            name: "SWAP",
-            component: () => import('../pages/home/swap.vue'),
+            path: "/home/wallet",
+            name: "钱包",
+            component: () => import('../pages/home/wallet.vue'),
         },{
-            path: "/home/pool",
-            name: "矿池",
-            component: () => import('../pages/home/pool.vue'),
-        },{
-            path: "/home/asset",
-            name: "资产",
-            component: () => import('../pages/home/asset.vue'),
-        },{
-            path: "/home/invite",
-            name: "邀请",
-            component: () => import('../pages/home/invite.vue'),
-        },{
-            path: "/home/poolinfo",
-            name: "矿池记录",
-            component: () => import('../pages/home/poolinfo.vue'),
+            path: "/pledge/exchange",
+            name: "兑换",
+            component: () => import('../pages/pledge/exchange.vue'),
         },{
             path: "/home/myteam",
-            name: "社区",
+            name: "我的团队",
             component: () => import('../pages/home/myteam.vue'),
-        }]
+        },{
+            path: "/home/sharetotal",
+            name: "分红统计",
+            component: () => import('../pages/home/sharetotal.vue'),
+        },{
+            path: "/pledge/withdraw",
+            name: "提现",
+            component: () => import('../pages/pledge/withdraw.vue'),
+        },{
+            path: "/home/noticeList",
+            name: "公告列表",
+            component: () => import('../pages/home/noticeList.vue'),
+        },{
+            path: "/home/noticeDetail",
+            name: "公告详情",
+            component: () => import('../pages/home/noticeDetail.vue'),
+        }
+        
+       ]
     }
 ]
 

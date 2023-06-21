@@ -1,266 +1,392 @@
 <template>
-  <div class="flex-col group space-y-20">
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-      <div class="flex-col section_2" v-for="(item, i) in headteamList" :key="i">
-        <div class="flex-row group_2 space-x-20">
-          <div class="flex-row flex-auto self-center space-x-8">
-            <img class="shrink-0 image_3"
-              src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/645348c1b98f5d001166de68/16831798184457721547.png" />
-            <div class="flex-col flex-auto space-y-2">
-              <span class="font_2">{{ filters.hideaddress(item.userName) }}</span>
-              <div class="flex-row self-start group_3 space-x-16">
-                <div class="flex-row items-baseline group_1 space-x-4">
-                  <span class="font_3">零撸区等级</span>
-                  <span class="font_4">L{{ item.level }}</span>
-                </div>
-                <div class="flex-row items-baseline group_9 space-x-4">
-                  <span class="font_3">质押区等级</span>
-                  <span class="font_5">L{{ item.zyLevel || 0 }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex-col justify-start items-center shrink-0 self-start text-wrapper_2">
-            <span class="font_3 text">初级节点</span>
-          </div>
-        </div>
-        <div class="flex-row justify-between equal-division">
-          <div class="flex-col items-center space-y-14">
-            <span class="font_6">{{ item.sub }}</span>
-            <span class="font_3">直推人数</span>
-          </div>
-          <div class="horiz-divider"></div>
-          <div class="flex-col items-center space-y-14">
-            <span class="font_6">{{ item.team }}</span>
-            <span class="font_3">团队人数</span>
-          </div>
-          <div class="horiz-divider"></div>
-          <div class="flex-col items-center space-y-14">
-            <span class="font_6">{{ item.plot }}</span>
-            <span class="font_3">小区人数</span>
-          </div>
-          <div class="horiz-divider"></div>
-          <div class="flex-col items-center space-y-14">
-            <span class="font_6">{{ item.quantity }}</span>
-            <span class="font_3">小区业绩</span>
+  <van-pull-refresh v-model="refreshing" @refresh="getMyTeamList">
+    <div class="flex-col section">
+      <div class="flex-row items-center group_2 space-x-10">
+        <img class="shrink-0 image_2"
+          src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123257433068007.png" />
+        <div class="flex-col shrink-0 group_3 view space-y-2">
+          <span class="font_3">{{ headteam.account ? filters.hideaddress(headteam?.account) : "数据读取中~" }}</span>
+          <div class="flex-row space-x-4">
+            <div class="flex-col justify-start items-center text-wrapper_2" v-if="headteam.is_chaojie === 1"><span
+                class="font_4">高级节点</span></div>
+            <div class="flex-col justify-start items-center text-wrapper_2" v-if="headteam.is_jie === 1"><span
+                class="font_4">初级节点</span></div>
+            <div class="flex-col justify-start items-center text-wrapper_2" v-if="headteam.is_youxiao === 1"><span
+                class="font_4">有效用户</span></div>
+            <div class="flex-col justify-start items-center text-wrapper_3"><span class="font_5">V{{ headteam.level
+            }}</span></div>
           </div>
         </div>
       </div>
-      <div class="flex-col group_4 space-y-16">
-        <span class="self-start text_5">直推列表</span>
-        <div class="flex-col space-y-12">
-          <div class="flex-col section_3 space-y-14" v-for="(item, i) in teamList" :key="item.userId">
-            <div class="flex-row items-center group_5 space-x-8">
-              <img class="shrink-0 image_3"
-                src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/645348c1b98f5d001166de68/16831798185268127862.png" />
-              <div class="flex-col flex-auto group_6 view space-y-2">
-                <span class="font_2">{{ filters.hideaddress(item.userName) }}</span>
-                <div class="flex-row self-start space-x-16">
-                  <div class="flex-row items-baseline space-x-4">
-                    <span class="font_3">零撸区等级</span>
-                    <span class="font_4">L{{ item.level }}</span>
-                  </div>
-                  <div class="flex-row items-baseline space-x-4">
-                    <span class="font_3">质押区等级</span>
-                    <span class="font_5">L{{ item.zyLevel || 0 }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="flex-row justify-between">
-              <span class="font_3">业绩</span>
-              <span class="font_7 text_9">注册时间</span>
-            </div>
-            <div class="flex-row justify-between">
-              <span class="font_1 text_10">{{ item.yeji }}</span>
-              <span class="font_8 text_11">{{ item.createTime }}</span>
-            </div>
-          </div>
+      <div class="flex-row equal-division">
+        <div class="flex-col items-center equal-division-item group_4 space-y-12">
+          <span class="font_6">{{ headteam.zhituinum }}</span>
+          <span class="font_2">直推人数</span>
+        </div>
+        <div class="horiz-divider"></div>
+        <div class="flex-col items-center equal-division-item space-y-12">
+          <span class="font_6">{{ headteam.team_totalnum }}</span>
+          <span class="font_2">团队人数</span>
+        </div>
+        <div class="horiz-divider"></div>
+        <div class="flex-col items-center equal-division-item space-y-12">
+          <span class="font_6">{{ headteam.team_youxiaonum }}</span>
+          <span class="font_2">团队有效人数</span>
         </div>
       </div>
-    </van-pull-refresh>
-  </div>
+      <div class="flex-row justify-between items-center group_5">
+        <div class="flex-row items-center space-x-8" style="width: 92%;white-space: nowrap;text-overflow: ellipsis;">
+          <span class="font_3 text_3">邀请链接</span>
+          <span class="font_3 text_4" style="width: 80%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{ headteam.share_link }}</span>
+        </div>
+        <img class="image_3" @click="tools.copy(headteam.share_link)"
+          src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123256290298419.png" />
+      </div>
+    </div>
+    <div class="flex-col group_7 space-y-13">
+      <span class="self-start font_1 text_5">直推列表</span>
+
+      <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了">
+        <div class="flex-col section_2 space-y-14" v-for="(item, i) in teamList" :key="item.id">
+          <div class="flex-row">
+            <img class="shrink-0 image_2"
+              src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/641bf7ba5a7e3f031045ebb8/64892fd054fe000011691425/16867123256569743788.png" />
+            <div class="flex-col shrink-0 group_3 space-y-2">
+              <span class="font_3">{{ item?.nickname }}</span>
+              <div class="flex-row space-x-4">
+                <div class="flex-col justify-start items-center text-wrapper_4" v-if="headteam.is_chaojie === 1"><span
+                    class="font_4">高级节点</span></div>
+                <div class="flex-col justify-start items-center text-wrapper_4" v-if="headteam.is_jie === 1"><span
+                    class="font_4">初级节点</span></div>
+                <div class="flex-col justify-start items-center text-wrapper_4" v-if="headteam.is_youxiao === 1"><span
+                    class="font_4">有效用户</span></div>
+                <div class="flex-col justify-start items-center text-wrapper_5"><span class="font_5">V{{ item.level
+                }}</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-row justify-center items-baseline group_6 space-x-6">
+            <span class="font_7">注册时间</span>
+            <span class="font_8 text_6">{{ item.createtime }}</span>
+          </div>
+        </div>
+      </van-list>
+    </div>
+  </van-pull-refresh>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getMyTeam, getMyPush } from '../../api/app.js'
 import filters from '../../../utils/filters';
+import tools from '../../../utils/tools'
 
-const headteamList = ref([])
+const headteam = ref({})
 const teamList = ref([])
 const refreshing = ref(false);
+const loading = ref(false);
+const finished = ref(false);
+const orderpage = ref(1)
 onMounted(async () => {
+  await getMyTeamList()
   await onRefresh()
 })
 
 const getMyTeamList = () => {
   getMyTeam().then(res => {
-    headteamList.value = [res.obj]
+    headteam.value = res.data
+    setTimeout(() => {
+      refreshing.value = false;
+    }, 1000);
   })
 }
 
 const getMyPushList = () => {
-  getMyPush().then(res => {
-    teamList.value = res.obj.list
-    refreshing.value = false
+  if (refreshing.value) {
+    teamList.value = [];
+    orderpage.value = 1
+    refreshing.value = false;
+  }
+
+  getMyPush({
+    page: orderpage.value
+  }).then(({ data }) => {
+    teamList.value = [...teamList.value, ...data.data]
+    loading.value = false;
+    if (teamList.value.length >= data.total) {
+      finished.value = true;
+    } else {
+      orderpage.value += 1
+    }
   })
 }
 
 const onRefresh = async () => {
+  // 清空列表数据
+  finished.value = false;
   refreshing.value = true
-  await getMyTeamList();
-  await getMyPushList()
+  // 重新加载数据
+  // 将 loading 设置为 true，表示处于加载状态
+  loading.value = true;
+  getMyPushList();
 };
 </script>
 
 <style lang='scss' scoped>
-.group {
-  .section_2 {
-    padding: 20px 16px 18px;
-    background-image: linear-gradient(154.1deg, #f9f9f9 0%, #f8f8f8 100%);
-    border-radius: 20px;
+.section {
+  padding: 0 12px;
+  background-image: linear-gradient(90deg, #4f13f9 0%, #df23f0 100%);
+  border-radius: 8px;
 
-    .group_2 {
-      padding-bottom: 16px;
-      border-bottom: solid 1px #f0f0f0;
+  .group_2 {
+    padding: 24px 0 12px;
 
-      .text-wrapper_2 {
-        padding: 8px 0;
-        background-color: #f0f0f0;
-        border-radius: 14px;
-        border-image-slice: 1;
-        width: 76px;
-        height: 28px;
-        border: solid 1px #6b46fe;
+    .image_2 {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+    }
 
-        .text {
-          color: transparent;
-          line-height: 12.5px;
-          background-image: linear-gradient(93.1deg, #6b46fe 0%, #fe46eb 100%);
-          -webkit-background-clip: text;
+    .group_3 {
+      margin: 2px 116px 2px 10px;
+      width: 160px;
+
+      .space-x-4 {
+        &>*:not(:first-child) {
+          margin-left: 4px;
+        }
+
+        .text-wrapper_2 {
+          padding: 4px 0;
+          background-color: #ffffff33;
+          border-radius: 14px;
+          backdrop-filter: blur(15px);
+          width: 60px;
+          height: 20px;
+
+          .font_4 {
+            font-size: 11px;
+            font-family: MiSans;
+            line-height: 10.5px;
+            color: #ffffff;
+          }
+        }
+
+        .text-wrapper_3 {
+          padding: 4px 0;
+          background-color: #ffffff33;
+          border-radius: 14px;
+          backdrop-filter: blur(15px);
+          width: 32px;
+          height: 20px;
+
+          .font_5 {
+            font-size: 11px;
+            font-family: MiSans;
+            line-height: 8.5px;
+            color: #ffffff;
+          }
         }
       }
     }
 
-    .space-x-20 {
-      &>*:not(:first-child) {
-        margin-left: 20px;
-      }
+    .view {
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 0;
     }
 
-    .equal-division {
-      margin-left: 6px;
-      margin-right: 2px;
-      padding: 26px 0;
-
-      .horiz-divider {
-        margin: 6px 0 8px;
-        background-color: #f0f0f0;
-        width: 1px;
-        height: 24px;
+    .space-y-2 {
+      &>*:not(:first-child) {
+        margin-top: 2px;
       }
     }
   }
 
-  .group_4 {
-    padding: 12px 0;
+  .space-x-10 {
+    &>*:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
 
-    .text_5 {
-      color: #28282f;
-      font-size: 17px;
-      font-family: MiSans;
-      line-height: 16px;
+  .equal-division {
+    padding: 12px 0;
+    background-color: #ffffff33;
+    border-radius: 8px;
+
+    .equal-division-item {
+      margin-left: 6px;
+      flex: 1 1 103.5px;
+      padding: 6px 0;
+
+      .font_6 {
+        font-size: 15px;
+        font-family: MiSans;
+        line-height: 12px;
+        color: #ffffff;
+      }
+
+      .font_2 {
+        font-size: 13px;
+        font-family: MiSans;
+        line-height: 12px;
+        color: #c3cbd6;
+      }
+    }
+
+    .group_4 {
+      margin-left: 0;
     }
 
     .space-y-12 {
       &>*:not(:first-child) {
         margin-top: 12px;
       }
+    }
 
-      .section_3 {
-        padding: 20px 16px 24px;
-        background-image: linear-gradient(158.5deg, #f9f9f9 0%, #f8f8f8 100%);
-        border-radius: 20px;
-
-        .group_5 {
-          padding-bottom: 13px;
-          border-bottom: solid 1px #f0f0f0;
-
-          .group_6 {
-            margin-left: 8px;
-            width: 164px;
-
-            .text_6 {
-              margin-left: 4px;
-            }
-
-            .text_17 {
-              margin-left: 16px;
-            }
-
-            .text_18 {
-              margin-left: 4px;
-            }
-
-            .text_13 {
-              margin-left: 4px;
-            }
-
-            .text_15 {
-              margin-left: 4px;
-            }
-          }
-
-          .view {
-            margin-left: 0;
-          }
-
-          .text_8 {
-            margin-left: 2px;
-            margin-top: 28px;
-          }
-        }
-
-        .font_7 {
-          font-size: 13px;
-          font-family: MiSans;
-          line-height: 12px;
-          color: #808080;
-        }
-
-        .text_9 {
-          margin-right: 108px;
-        }
-
-        .font_1 {
-          font-size: 13px;
-          font-family: MiSans;
-          line-height: 10px;
-          color: #484856;
-        }
-
-        .text_10 {
-          line-height: 10.5px;
-        }
-
-        .font_8 {
-          font-size: 13px;
-          font-family: MiSans;
-          line-height: 10px;
-          color: #808080;
-        }
-
-        .text_11 {
-          margin-right: 26px;
-        }
-      }
+    .horiz-divider {
+      margin: 12px 0 12px 6px;
+      background-color: #ffffff1a;
+      width: 1px;
+      height: 24px;
     }
   }
 
-  .space-y-16 {
-    &>*:not(:first-child) {
-      margin-top: 16px;
+  .group_5 {
+    padding: 9px 0 21px;
+
+    .space-x-8 {
+      &>*:not(:first-child) {
+        margin-left: 8px;
+      }
+
+      .text_3 {
+        line-height: 14px;
+      }
+
+      .text_4 {
+        line-height: 15.5px;
+      }
+    }
+
+    .image_3 {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .font_3 {
+    font-size: 15px;
+    font-family: MiSans;
+    line-height: 22px;
+    color: #ffffff;
+  }
+}
+
+.group_7 {
+  margin-top: 28px;
+
+  .font_1 {
+    font-size: 17px;
+    font-family: MiSans;
+    color: #ffffff;
+  }
+
+  .text_5 {
+    line-height: 16px;
+  }
+
+  .section_2 {
+    padding: 12px 12px 16px;
+    background-color: #242b44;
+    border-radius: 8px;
+
+    .image_2 {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+    }
+
+    .group_3 {
+      margin: 2px 116px 2px 10px;
+      width: 160px;
+
+      .font_3 {
+        font-size: 15px;
+        font-family: MiSans;
+        line-height: 22px;
+        color: #ffffff;
+      }
+
+      .space-x-4 {
+        &>*:not(:first-child) {
+          margin-left: 4px;
+        }
+
+        .text-wrapper_4 {
+          padding: 4px 0;
+          background-color: #ffffff1a;
+          border-radius: 14px;
+          width: 60px;
+          height: 20px;
+
+          .font_4 {
+            font-size: 11px;
+            font-family: MiSans;
+            line-height: 10.5px;
+            color: #ffffff;
+          }
+        }
+
+        .text-wrapper_5 {
+          padding: 4px 0;
+          background-color: #ffffff1a;
+          border-radius: 14px;
+          width: 32px;
+          height: 20px;
+
+          .font_5 {
+            font-size: 11px;
+            font-family: MiSans;
+            line-height: 8.5px;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .space-y-2 {
+      &>*:not(:first-child) {
+        margin-top: 2px;
+      }
+    }
+
+    .group_6 {
+      padding: 0 58px;
+
+      .font_7 {
+        font-size: 13px;
+        font-family: MiSans;
+        line-height: 12px;
+        color: #7887ae;
+      }
+
+      .font_8 {
+        font-size: 13px;
+        font-family: MiSans;
+        line-height: 10.5px;
+        color: #7887ae;
+      }
+
+      .text_6 {
+        line-height: 10px;
+      }
+    }
+
+    .space-x-6 {
+      &>*:not(:first-child) {
+        margin-left: 6px;
+      }
     }
   }
 
@@ -268,88 +394,11 @@ const onRefresh = async () => {
     &>*:not(:first-child) {
       margin-top: 14px;
     }
-
-    .font_6 {
-      font-size: 15px;
-      font-family: MiSans;
-      line-height: 12px;
-      color: #484856;
-    }
-  }
-
-  .space-x-8 {
-    &>*:not(:first-child) {
-      margin-left: 8px;
-    }
-  }
-
-  .image_3 {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-  }
-
-  .space-y-2 {
-    &>*:not(:first-child) {
-      margin-top: 2px;
-    }
-
-    .group_3 {
-      width: 178px;
-
-      .group_1 {
-        flex: 1 1 81px;
-      }
-
-      .group_9 {
-        flex: 1 1 81px;
-      }
-    }
-  }
-
-  .font_2 {
-    font-size: 15px;
-    font-family: MiSans;
-    line-height: 24px;
-    color: #28282f;
-  }
-
-  .space-x-16 {
-    &>*:not(:first-child) {
-      margin-left: 16px;
-    }
-  }
-
-  .space-x-4 {
-    &>*:not(:first-child) {
-      margin-left: 4px;
-    }
-  }
-
-  .font_3 {
-    font-size: 13px;
-    font-family: MiSans;
-    line-height: 12px;
-    color: #90909c;
-  }
-
-  .font_4 {
-    font-size: 13px;
-    font-family: MiSans;
-    line-height: 10px;
-    color: #ff4b7b;
-  }
-
-  .font_5 {
-    font-size: 13px;
-    font-family: MiSans;
-    line-height: 10px;
-    color: #22e358;
   }
 }
 
-.space-y-20 {
+.space-y-13 {
   &>*:not(:first-child) {
-    margin-top: 20px;
+    margin-top: 13px;
   }
 }</style>

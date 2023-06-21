@@ -6,33 +6,36 @@ import service from '../../utils/request.js'
  */
 export function Login(data) {
 	return service({
-		url: '/front/loginNV',
+		url: '/api/user/login',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * ltt k线
+ * 质押列表
  * @param {*} data 
  */
-export function getLttline(data) {
+export function getpledgeList(data) {
 	return service({
-		url: '/front/change/k_xian',
+		url: '/api/arb/zyrule',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 获取公告
+ * 获取平台规则
  * @param {*} data 
  */
-export function getContent(data) {
+export function getRulers(data) {
 	return service({
-		url: '/search/getContent',
-		method: 'post',
+		url: '/api/arb/getrule',
+		method: 'get',
 		params: data,
+		data
 	})
 }
 
@@ -42,21 +45,23 @@ export function getContent(data) {
  */
 export function getSwiper(data) {
 	return service({
-		url: '/search/indexSlides',
+		url: '/addons/cms/wxapp.index/h5index',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 检查是否注册
+ * 我的质押列表
  * @param {*} data 
  */
-export function checkAddress(data) {
+export function myPledgeList(data) {
 	return service({
-		url: '/front/financial/findAddress',
+		url: '/api/arb/myzyorder',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
@@ -66,91 +71,59 @@ export function checkAddress(data) {
  */
 export function pledgeapi(data) {
 	return service({
-		url: '/front/change/usdtExLtc',
+		url: '/api/arb/create_zyorder',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 获取用户资产
+ * 获取资产明细
  * @param {*} data 
  */
 export function getUserassets(data) {
 	return service({
-		url: '/front/financial/assetsTotal',
+		url: '/api/arb/moneylog',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 获取ltt余额
+ * 分红统计
  * @param {*} data 
  */
-export function lttbalance(data) {
+export function shareinfo(data) {
 	return service({
-		url: '/front/financial/lttList',
-		method: 'post',
+		url: '/api/arb/v15info',
+		method: 'get',
 		params: data,
+		data
 	})
 }
 
 /**
- * 质押记录
+ * 兑换记录
  * @param {*} data 
  */
-export function pledgeInfo(data) {
+export function exchangeInfo(data) {
 	return service({
-		url: '/front/change/pledgeLog',
+		url: '/api/arb/duihuanlog',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 领取收益
+ * ART钱包
  * @param {*} data 
  */
-export function getEarnings(data) {
+export function getARTaccets(data) {
 	return service({
-		url: '/front/change/getEarnings',
-		method: 'post',
-		params: data,
-	})
-}
-
-/**
- * 赎回
- * @param {*} data 
- */
-export function getRedeem(data) {
-	return service({
-		url: '/front/change/getRedeem',
-		method: 'post',
-		params: data,
-	})
-}
-
-/**
- * 一键领取所有收益
- * @param {*} data 
- */
-export function lqallearnings(data) {
-	return service({
-		url: '/front/change/getEarningsAll',
-		method: 'post',
-		params: data,
-	})
-}
-
-/**
- * 提现记录
- * @param {*} data 
- */
-export function getApplyLog(data) {
-	return service({
-		url: '/front/financial/getApplyLog',
+		url: '/api/arb/artinfo',
 		method: 'post',
 		params: data,
 	})
@@ -160,35 +133,51 @@ export function getApplyLog(data) {
  * 钱包列表
  * @param {*} data 
  */
-export function getassetsTotal(data) {
+export function accetsList(data) {
 	return service({
-		url: '/front/financial/assetsTotal',
+		url: '/api/arb/qianblist',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 提现配置
+ * art提取
  * @param {*} data 
  */
-export function getApplyset(data) {
+export function getuserExtract(data) {
 	return service({
-		url: '/front/financial/getWalletUsing',
+		url: '/api/arb/arttiqu',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 提现
+ * 用户提现
  * @param {*} data 
  */
 export function userwithdraw(data) {
 	return service({
-		url: '/front/financial/apply',
+		url: '/api/arb/tixian',
 		method: 'post',
 		params: data,
+		data
+	})
+}
+
+/**
+ * 获取arb价格
+ * @param {*} data 
+ */
+export function getARBprice(data) {
+	return service({
+		url: '/api/arb/getARBprice',
+		method: 'post',
+		params: data,
+		data
 	})
 }
 
@@ -198,9 +187,10 @@ export function userwithdraw(data) {
  */
 export function getMyTeam(data) {
 	return service({
-		url: '/front/agent/myTeam',
+		url: '/api/arb/myteam',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
@@ -210,56 +200,61 @@ export function getMyTeam(data) {
  */
 export function getMyPush(data) {
 	return service({
-		url: '/front/agent/myPush',
+		url: '/api/arb/zhituilist',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * 邀请链接
+ * 用户兑换
  * @param {*} data 
  */
-export function getInvideUrl(data) {
+export function userexchange(data) {
 	return service({
-		url: '/front/agent/inviteUrl',
+		url: '/api/arb/duihuan',
 		method: 'post',
 		params: data,
+		data
 	})
 }
 
 /**
- * LTT币种详情
+ * 公告列表
  * @param {*} data 
  */
-export function coininfo(data) {
+export function noticeList(data) {
 	return service({
-		url: '/front/ltt/lttList',
-		method: 'post',
+		url: '/addons/cms/wxapp.index/get_blocklist',
+		method: 'get',
 		params: data,
+		data
 	})
 }
 
 /**
- * 排行榜置顶数据
+ * 公告详情
  * @param {*} data 
  */
-export function tatolRankingList(data) {
+export function noticeDetail(data) {
 	return service({
-		url: '/front/financial/tatolRankingList',
-		method: 'post',
+		url: '/addons/cms/wxapp.index/get_blockinfo',
+		method: 'get',
 		params: data,
+		data
 	})
 }
 
 /**
- * 排行榜
+ * 用户信息
  * @param {*} data 
  */
-export function getrankList(data) {
+export function myuserinfo(data) {
 	return service({
-		url: '/front/financial/rankingList',
+		url: '/api/user/index',
 		method: 'post',
 		params: data,
+		data
 	})
 }

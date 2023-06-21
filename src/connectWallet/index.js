@@ -5,6 +5,7 @@ import { Provider, Web3Provider } from "@ethersproject/providers"
 import { useAddrStore } from '../store/user'
 import { USDTcontractAddress, USDTcontractABI, LOGINcontractAddress, LTCcontractAddress, rechargeABI, poolAccount, XIERcontractABI } from "./constants";
 import { storeToRefs } from 'pinia'
+import { networkConfig } from '../../config/networkConfig';
 const store = useAddrStore()
 const { address } = storeToRefs(store)
 
@@ -69,6 +70,14 @@ export async function balance() {
 export async function toAmount(amount, tokenDecimals = 18) {
   return ethers.utils.parseEther(amount.toString(), tokenDecimals).toString();
 }
+
+//查询代币价格
+export async function getCoinPrice() {
+  let MyContract = await createUSDTContract()
+  let price = await MyContract.price()
+  price = Number(ethers.utils.formatEther(price.toString())).toFixed(4)
+  return price;
+};
 
 /**
  * 查询授权额度
@@ -146,7 +155,8 @@ export function connetWallet() {
       if (ethereum) {
         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
         await getChainId(); //获取chanid参数
-        // _listeningMetamsk();
+        await _listeningMetamsk();
+        // await updateAccount(accounts[0])// 执行登录操作
         resolve(accounts[0]);
       } else {
         reject();
@@ -160,7 +170,7 @@ export function connetWallet() {
 };
 
 /**
- * @description: 主动切换到BSC网络
+ * @description: 切换到对应网络
  * @param {*}
  * @return {*}
  */
@@ -170,17 +180,20 @@ async function switchToEthereum() {
       method: "wallet_switchEthereumChain",
       params: [
         {
-          chainId: "0x38"
+          chainId: networkConfig.chain.Id
         }
       ]
     });
   } catch (error) {
-    console.log(error);
+    console.log(error)
+    if (error.code === 4902) {
+      switchToOtherNetwork()
+    } else if (error.code === 4001) return
   }
 }
 
 /**
- * @description: 主动切换到其余链配置
+ * @description: 添加并主动切换到其余链配置
  * @param {*} findChain
  * @return {*}
  */
@@ -190,15 +203,11 @@ async function switchToOtherNetwork(findChain) {
       method: "wallet_addEthereumChain",
       params: [
         {
-          chainId: "0x38",
-          chainName: "Binance Smart Chain",
-          nativeCurrency: {
-            name: "BNB",
-            symbol: "BNB",
-            decimals: 18
-          },
-          rpcUrls: ["https://bsc-dataseed.binance.org/"],
-          blockExplorerUrls: ["https://bscscan.com/"]
+          chainId: networkConfig.chain.Id,
+          chainName: networkConfig.chain.name,
+          nativeCurrency: networkConfig.chain.nativeCurrency,
+          rpcUrls: networkConfig.chain.rpcUrls,
+          blockExplorerUrls: networkConfig.chain.blockExplorerUrls
         },
       ] // [{XXXXX}]  is Array
     });
@@ -218,14 +227,15 @@ export async function switchNetwork(id) {
     showToast('Please install metamsk')
     return;
   }
-  if (!findChain) {
-    showToast('The current website does not support the chain')
-    return;
-  }
-  if (id === "0x38") {
+  // 若DAPP支持多网络时开启此功能
+  // if (!findChain) {
+  //   showToast('The current website does not support the chain')
+  //   return;
+  // }
+  if (id === networkConfig.chain.Id) {
     // switchToEthereum();
   } else {
-    switchToOtherNetwork(findChain);
+    switchToEthereum(findChain);
   }
 }
 
@@ -298,8 +308,12 @@ export const nativeMetamaskMap = [
  * @param {*} info
  * @return {*}
  */
-function handelConnectInfo(info) {
+async function handelConnectInfo(info) {
   console.log(info, "handelConnectInfo");
+  if (info.chainId == networkConfig.chain.Id) {
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    await updateAccount(accounts[0])
+  }
 }
 
 /**
@@ -330,12 +344,33 @@ function handleNewChain(chain) {
 }
 
 /**
+ * 
+ */
+async function updateAccount(account) {
+  if (account && account.length === 42) {
+    // 执行登录操作
+    await store.loginaddr(account)
+  }
+}
+
+/**
  * @description: handelNewMessage
  * @param {*} msg
  * @return {*}
  */
 function handelNewMessage(msg) {
   console.log(msg, "handelNewMessage");
+  const { ethereum } = window;
+  if (!ethereum) return showToast('请在区块链浏览器打开~');
+  const params = res?.data?.data?.data?.params;
+  console.log(params)
+  updateAccount(params[0])
+  // 执行登录操作
+  if (params && params.chainId) {
+    if (params.chainId !== networkConfig.chain.Id) {
+      switchToEthereum()
+    }
+  }
 }
 
 /**
@@ -352,24 +387,37 @@ function _listeningMetamsk() {
 
   ethereum.on("message", handelNewMessage);
 
-  ethereum.on("connect", throttle(handelConnectInfo, 1000));
+  ethereum.on("connect", handelConnectInfo);
 
-  ethereum.on("disconnect", throttle(handleDisConnect, 1000));
+  ethereum.on("disconnect", handleDisConnect);
+}
+
+
+function throttle(fn, delay) {
+  var timer = null;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn();
+    }, delay);
+  }
 }
 
 //监听PC端账号切换
-window.addEventListener('message', res => {
-  const { ethereum } = window;
-  if (!ethereum) return showToast('请在区块链浏览器打开~');
-  const params = res?.data?.data?.data?.params;
-  if (params && params[0] && params[0].length === 42) {
-    store.loginaddr(params[0])
-    // pubsub.publish('changeAccount',params[0]);
-    // 执行登录操作
-  }
-  if (params && params.chainId) {
-    if (params.chainId !== "0x38") {
-      switchToOtherNetwork()
-    }
-  }
-});
+// window.addEventListener('message', res => {
+//   const { ethereum } = window;
+//   if (!ethereum) return showToast('请在区块链浏览器打开~');
+//   const params = res?.data?.data?.data?.params;
+//   console.log(params)
+//   if (params && params[0] && params[0].length === 42) {
+//     store.loginaddr(params[0])
+//     // pubsub.publish('changeAccount',params[0]);
+//     // 执行登录操作
+//   }
+//   if (params && params.chainId) {
+//     if (params.chainId !== networkConfig.chain.Id) {
+//       switchToEthereum()
+//       // switchToOtherNetwork()
+//     }
+//   }
+// });
