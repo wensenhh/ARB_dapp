@@ -1,7 +1,7 @@
 <template>
   <div class="flex-row justify-between items-center section_2">
     <div class="flex-row space-x-8">
-      <img class="shrink-0 image" src="../../public/logo.png" />
+      <img class="shrink-0 image" src="/logo.png" />
       <div class="group">
         <span class="text">
           ARB

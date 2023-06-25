@@ -6,6 +6,7 @@ import { useAddrStore } from '../store/user'
 import { USDTcontractAddress, USDTcontractABI, LOGINcontractAddress, LTCcontractAddress, rechargeABI, poolAccount, XIERcontractABI } from "./constants";
 import { storeToRefs } from 'pinia'
 import { networkConfig } from '../../config/networkConfig';
+import tp from "tp-js-sdk";
 const store = useAddrStore()
 const { address } = storeToRefs(store)
 
@@ -47,6 +48,16 @@ export async function sign() {
   const provider = await getProvider();
   const signer = await provider.getSigner();
   const result = await signer.signMessage(`Authorize Login`, address.value, 'Authorize');
+  return result;
+};
+
+/**
+ * 判断是否为观察钱包(TP)
+ * @param
+*/
+export async function isWatchWallet() {
+  const {data} = await tp.getCurrentWallet();
+  const result = data.walletType == 'observeWallet';
   return result;
 };
 
@@ -153,6 +164,9 @@ export function connetWallet() {
     const { ethereum } = window;
     try {
       if (ethereum) {
+        if (typeof ethereum.isTokenPocket !== 'undefined') {
+          console.log('TokenPocket Extension is installed!');
+        }
         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
         await getChainId(); //获取chanid参数
         await _listeningMetamsk();
@@ -331,6 +345,7 @@ function handleDisConnect(disconnect) {
  * @return {*}
  */
 function handleNewAccount(account) {
+  console.log('handleNewAccount', account[0]);
   updateAccount(account[0]);
 }
 

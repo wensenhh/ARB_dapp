@@ -33,6 +33,20 @@
           <span class="font_6">{{ headteam.team_youxiaonum }}</span>
           <span class="font_2">团队有效人数</span>
         </div>
+        <div class="flex-col items-center equal-division-item group_4 space-y-12">
+          <span class="font_6">{{ headteam.yeji_yesterday }}</span>
+          <span class="font_2">昨日业绩</span>
+        </div>
+        <div class="horiz-divider"></div>
+        <div class="flex-col items-center equal-division-item space-y-12">
+          <span class="font_6">{{ headteam.yeji_today }}</span>
+          <span class="font_2">今日新增业绩</span>
+        </div>
+        <div class="horiz-divider"></div>
+        <div class="flex-col items-center equal-division-item space-y-12">
+          <span class="font_6">{{ headteam.yeji_total }}</span>
+          <span class="font_2">总业绩</span>
+        </div>
       </div>
       <div class="flex-row justify-between items-center group_5">
         <div class="flex-row items-center space-x-8" style="width: 92%;white-space: nowrap;text-overflow: ellipsis;">
@@ -213,12 +227,13 @@ const onRefresh = async () => {
     padding: 12px 0;
     background-color: #ffffff33;
     border-radius: 8px;
-
+    flex-flow: row wrap;
+    align-content: flex-start;
     .equal-division-item {
       margin-left: 6px;
       flex: 1 1 103.5px;
       padding: 6px 0;
-
+      flex: 0 0 30%;
       .font_6 {
         font-size: 15px;
         font-family: MiSans;

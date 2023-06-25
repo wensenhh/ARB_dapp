@@ -110,7 +110,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 import { useRouter, useRoute } from "vue-router";
-import { connetWallet, sign, allowance, balance, createCCContract, createRechargeContract, toAmount, ApproveCoin } from '../../connectWallet/index'
+import { connetWallet, sign, allowance, balance, createRechargeContract, toAmount, ApproveCoin } from '../../connectWallet/index'
 import { showToast, showConfirmDialog, showFailToast, showLoadingToast, closeToast } from 'vant';
 import { useAddrStore } from '../../store/user'
 import { storeToRefs } from "pinia"
@@ -153,6 +153,7 @@ onMounted(async () => {
     showToast(t('index.wallteerror'))
   } else {
     myaddress.value = res
+    store.changeaddr(res)
     await userLogin()
   }
   await getallSwiper()
@@ -233,7 +234,7 @@ const getApprovecoin = async (type) => {
       timer = setInterval(() => {
         key++
         myallowance()
-        if (usdtallowance || key > 10) {
+        if (approveFlagUSDT.value || key > 10) {
           clearInterval(timer)
         }
       }, 1000)
